@@ -15,11 +15,11 @@ During development, build the utilities with the provided scripts:
 
 ```powershell
 pwsh -NoProfile -File scripts/build-go-cli.ps1
-```
+```text
 
 ```bash
 bash scripts/build-go-cli.sh
-```
+```text
 
 This produces native binaries in `go-cli/bin/`:
 
@@ -49,31 +49,31 @@ go run ./go-cli/cmd/setup
 
 # Or using the built binary
 a11y-agents-setup --role developer --scope global --yes
-```
+```text
 
 ### Functionality
 
 #### Step 1: Detect Current Environment
 
-```
+```text
 ✓ Checking installed agents/skills...
 ✓ Found 80 agents at ~/.gh/skills/...
 ✓ No previous configuration found
-```
+```text
 
 #### Step 2: Scope Selection
 
-```
+```text
 Installation scope:
   1. Global (~/.claude/agents)
   2. Project (./.claude/agents)
 
 Choose: [1] > _
-```
+```text
 
 #### Step 3: Role Selection
 
-```
+```text
 Installation role:
   1. Developer (all agents + CLI tools)
   2. Reviewer (read-only audit agents)
@@ -82,11 +82,11 @@ Installation role:
   5. Custom (pick individual agents)
 
 Choose: [1] > _
-```
+```text
 
 #### Step 4: Platform Setup
 
-```
+```text
 Configure for:
   [ ] VS Code (Copilot) - Stable
   [ ] VS Code (Copilot) - Insiders
@@ -95,32 +95,32 @@ Configure for:
   [ ] Gemini CLI
 
 Configure: [y/n] > y
-```
+```text
 
 #### Step 5: MCP Profile Configuration
 
-```
+```text
 Configuring VS Code MCP profiles...
   ✓ Detected VS Code Stable at C:\Users\...\AppData\Local\...
   ✓ Detected VS Code Insiders at C:\Users\...\AppData\Local\...
   ✓ Setting up MCP socket connections
 
 Enter MCP server port [8080]: > _
-```
+```text
 
 #### Step 6: Team Config (Optional)
 
-```
+```text
 Team configuration file (optional):
   Path to config.json: > config.json
 
 Validating config...
   ✓ Loaded: role=developer, scope=global, autoUpdate=true
-```
+```text
 
 #### Step 7: Summary & Confirmation
 
-```
+```text
 Configuration Summary:
   Scope: Global (~/.claude/agents)
   Role: developer
@@ -129,11 +129,11 @@ Configuration Summary:
   Auto-update: enabled
 
 Apply configuration? [y/n] > y
-```
+```text
 
 #### Step 8: Post-Setup Health Check
 
-```
+```text
 Running health checks...
   ✓ GitHub CLI detected
   ✓ Agent files validated
@@ -142,18 +142,18 @@ Running health checks...
   ✓ VS Code extension loaded
 
 ✅ Setup complete! Ready to use.
-```
+```text
 
 ### Output Files Created
 
-```
+```text
 ~/.accessibility-agents/
 ├── config.json                    # User configuration
 ├── manifests.json                 # Installed agents/skills
 ├── version.txt                    # Current version
 └── logs/
     └── setup-YYYY-MM-DD.log      # Setup log
-```
+```text
 
 ### Return Codes
 
@@ -184,91 +184,91 @@ a11y-agents-health --check runtimes
 a11y-agents-health --check agents
 a11y-agents-health --check hooks
 a11y-agents-health --check all
-```
+```text
 
 ### Checks Performed
 
 #### 1. Runtime Dependencies
 
-```
+```text
 Runtime Dependencies:
   ✓ GitHub CLI v2.47.0+ (required)
   ⚠ Java 11.0.15 (optional, for PDF analysis)
   ✓ Git 2.37.0 (required for hooks)
-```
+```text
 
 Node.js remains optional here. It is only required when a user wants to run the MCP server locally.
 
 #### 2. Playwright Browsers
 
-```
+```text
 Playwright Browsers:
   ✓ Chromium (for accessibility scans)
   ✓ Firefox (optional)
   ⚠ WebKit (not installed)
-```
+```text
 
 #### 3. Agent/Skill Files
 
-```
+```text
 Agent & Skill Files:
   ✓ 80 agents found
   ✓ 25 skills found
   ✓ All files readable
   ✓ Manifests consistent
-```
+```text
 
 #### 4. Configuration
 
-```
+```text
 Configuration:
   ✓ User config loaded
   ✓ Role: developer
   ✓ Scope: global
   ✓ Team config: valid
-```
+```text
 
 #### 5. VS Code Integration
 
-```
+```text
 VS Code Integration:
   ✓ Extension installed (Copilot)
   ✓ Settings folder exists
   ✓ MCP profiles configured
   ⚠ VS Code Insiders not detected
-```
+```text
 
 #### 6. Claude Desktop MCP
 
-```
+```text
 Claude Desktop MCP:
   ✓ Configuration exists in claude_desktop_config.json
   ✓ MCP server socket accessible
   ✓ Health check passed
-```
+```text
 
 #### 7. Git Hooks
 
-```
+```text
 Git Hooks:
   ✓ Pre-commit hook installed
   ✓ Hook is executable
   ✓ Hook tests pass
   ✓ Global hook directory: ~/.git/hooks
-```
+```text
 
 #### 8. Network Connectivity
 
-```
+```text
 Network:
   ✓ GitHub API accessible
   ✓ Skills registry accessible
   ✓ Can check for updates
-```
+```text
 
 ### Output Report
 
-```
+```text
 Health Check Report
 ═══════════════════════════════════════════════════════════
 
@@ -285,7 +285,7 @@ Config: ~/.accessibility-agents/config.json
 ═══════════════════════════════════════════════════════════
 
 ✅ All systems operational. Ready to use!
-```
+```text
 
 ### Return Codes
 
@@ -319,34 +319,34 @@ a11y-agents-repair --fix manifests
 a11y-agents-repair --fix hooks
 a11y-agents-repair --fix config
 a11y-agents-repair --fix all
-```
+```text
 
 ### Repair Actions
 
 #### 1. Regenerate Manifests
 
-```
+```text
 Regenerating manifests...
   ✓ Found 80 agents
   ✓ Found 25 skills
   ✓ Validating file integrity
   ✓ Wrote manifests.json
-```
+```text
 
 #### 2. Reinstall Git Hooks
 
-```
+```text
 Reinstalling Git hooks...
   ✓ Found pre-commit hook
   ✓ Backing up existing hooks
   ✓ Installing fresh hook
   ✓ Testing hook execution
   ✓ Registered global hook
-```
+```text
 
 #### 3. Validate Configuration
 
-```
+```text
 Validating configuration...
   ✓ config.json exists
   ✓ config.json valid JSON
@@ -354,33 +354,33 @@ Validating configuration...
   ✓ Version alignment check
   ? Missing: "autoUpdate" (using default: true)
   ✓ Configuration valid
-```
+```text
 
 #### 4. Sync MCP Profiles
 
-```
+```text
 Syncing MCP profiles...
   ✓ Claude Desktop profile found
   ✓ MCP socket connection established
   ✓ Skills available to Claude
   ✓ Agents available to Claude
   ✓ MCP profiles synchronized
-```
+```text
 
 #### 5. Fix File Permissions
 
-```
+```text
 Fixing file permissions...
   ✓ Agent files: readable ✓
   ✓ Skill files: readable ✓
   ✓ Config files: readable/writable ✓
   ✓ Hook files: executable ✓
   ✓ All permissions correct
-```
+```text
 
 #### 6. Version Consistency
 
-```
+```text
 Checking version consistency...
   Current: 5.0.0
   ✓ CHANGELOG.md: 5.0.0
@@ -388,11 +388,11 @@ Checking version consistency...
   ✓ Installed agents: v5.0.0
   ✓ Installed skills: v5.0.0
   ✓ All versions aligned
-```
+```text
 
 ### Output Report
 
-```
+```text
 Repair Report
 ═══════════════════════════════════════════════════════════
 
@@ -412,7 +412,7 @@ Status: REPAIRED
 Next step: Run 'gh skill health' to verify
 
 ═══════════════════════════════════════════════════════════
-```
+```text
 
 ### Return Codes
 
@@ -442,11 +442,11 @@ gh skill hooks Community-Access/accessibility-agents status
 
 # Standalone
 go run ./go-cli/cmd/hooks --action status
-```
+```text
 
 ### Install Functionality
 
-```
+```text
 Installing Git hooks...
 
 ✓ Detected Git repository at /d/code/agents/.git
@@ -470,11 +470,11 @@ Testing hook execution...
   ✓ Hook works correctly
 
 ✅ Git hooks installed successfully
-```
+```text
 
 ### Uninstall Functionality
 
-```
+```text
 Uninstalling Git hooks...
 
 ✓ Found pre-commit hook for accessibility-agents
@@ -483,11 +483,11 @@ Uninstalling Git hooks...
 ✓ Removed global hook registration
 
 ✅ Git hooks uninstalled
-```
+```text
 
 ### Status Functionality
 
-```
+```text
 Git Hooks Status
 ═══════════════════════════════════════════════════════════
 
@@ -508,7 +508,7 @@ Recent Hook Executions:
   2026-04-16 14:05:44 - PASSED (0 issues)
 
 ═══════════════════════════════════════════════════════════
-```
+```text
 
 ### Return Codes
 
@@ -537,7 +537,7 @@ gh skill setup Community-Access/accessibility-agents
 gh skill health Community-Access/accessibility-agents
 gh skill repair Community-Access/accessibility-agents
 gh skill hooks Community-Access/accessibility-agents [action]
-```
+```text
 
 This requires entries in `plugin.yaml`:
 
@@ -555,7 +555,7 @@ subcommands:
   - name: hooks
     description: "Manage Git pre-commit hooks"
     command: bin/a11y-agents-hooks
-```
+```text
 
 ### Phase 3: Testing
 
