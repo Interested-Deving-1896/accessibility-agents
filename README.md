@@ -485,6 +485,7 @@ The following guides cover advanced configuration, cross-platform handoff, and d
 | [Metadata and Markup Conventions](docs/guides/metadata-markup-conventions.md) | Recommended metadata fields and markdown structure conventions for agents, skills, and instructions |
 | [Plugin Packaging](docs/advanced/plugin-packaging.md) | Packaging and distributing agents for different environments |
 | [Platform References](docs/advanced/platform-references.md) | External documentation sources with feature-to-source mapping |
+| [Release Communications Checklist](docs/guides/release-communications-checklist.md) | Repeatable release messaging checklist for changelog, notes, publish, and announcements |
 | [Experimental Codex Multi-Agent Roles](docs/guides/codex-experimental-multi-agent.md) | Optional TOML-based Codex roles for focused accessibility passes |
 | [Research Sources](docs/RESEARCH-SOURCES.md) | Authoritative sources (W3C APG, WebAIM, WCAG 2.2, Deque) that informed every agent rule |
 
