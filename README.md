@@ -36,7 +36,7 @@ All agents run on:
 - **Claude Code** - Agents you invoke directly for accessibility evaluation
 - **GitHub Copilot** (VS Code and CLI) - Agents + workspace instructions that ensure accessibility guidance in every conversation
 - **Gemini CLI** - Skills-based extension with always-on WCAG AA context via GEMINI.md
-- **Codex CLI** - Stable `.codex/AGENTS.md` baseline plus optional experimental TOML-based roles for focused accessibility passes
+- **Codex CLI** - Direct Accessibility Agents skills pack plus optional experimental TOML-based roles for focused accessibility passes
 - **MCP Server** - HTTP-based server providing 24 accessibility scanning tools to any MCP-compatible client (Claude Desktop, VS Code, CI/CD pipelines)
 
 ## System Requirements
@@ -247,6 +247,7 @@ gh skill health Community-Access/accessibility-agents
 ```
 
 Important:
+
 - `gh skill install` is the future primary install path.
 - The setup tooling is being implemented as native Go binaries, not Node.js scripts.
 - Node.js is still required for the MCP server itself, but not for the installer experience.
@@ -329,21 +330,25 @@ After installation, run a validation and self-repair pass. This verifies that al
 You can also run it manually at any time:
 
 **PowerShell (Windows) — validate only:**
+
 ```powershell
 pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/repair-install.ps1 -SummaryPath .a11y-agent-team-install-summary.json
 ```
 
 **PowerShell (Windows) — validate and auto-repair:**
+
 ```powershell
 pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/repair-install.ps1 -SummaryPath .a11y-agent-team-install-summary.json -Repair
 ```
 
 **Shell (macOS / Linux / Git Bash) — validate only:**
+
 ```bash
 bash scripts/repair-install.sh --summary=.a11y-agent-team-install-summary.json --validate-only
 ```
 
 **Shell (macOS / Linux / Git Bash) — validate and auto-repair:**
+
 ```bash
 bash scripts/repair-install.sh --summary=.a11y-agent-team-install-summary.json
 ```
@@ -351,6 +356,7 @@ bash scripts/repair-install.sh --summary=.a11y-agent-team-install-summary.json
 VS Code users can run these via the **Terminal > Run Task** menu: look for the `Repair:` task group.
 
 The repair pass checks and fixes:
+
 - **Destination paths** — every installed surface (Claude, Copilot, Codex, Gemini, MCP) exists on disk
 - **MCP base dependencies** — `@modelcontextprotocol/sdk` and `zod` are present; runs `npm install --omit=dev` if missing
 - **Playwright** — `playwright-core` is installed; Chromium is functional; re-runs setup if broken
@@ -478,7 +484,7 @@ The following guides cover advanced configuration, cross-platform handoff, and d
 | [Advanced Scanning Patterns](docs/advanced/advanced-scanning-patterns.md) | Background scanning, worktree isolation, large libraries |
 | [Plugin Packaging](docs/advanced/plugin-packaging.md) | Packaging and distributing agents for different environments |
 | [Platform References](docs/advanced/platform-references.md) | External documentation sources with feature-to-source mapping |
-| [Experimental Codex Multi-Agent Roles](docs/guides/codex-experimental-multi-agent.md) | Optional TOML-based Codex roles layered on top of the stable AGENTS.md baseline |
+| [Experimental Codex Multi-Agent Roles](docs/guides/codex-experimental-multi-agent.md) | Optional TOML-based Codex roles for focused accessibility passes |
 | [Research Sources](docs/RESEARCH-SOURCES.md) | Authoritative sources (W3C APG, WebAIM, WCAG 2.2, Deque) that informed every agent rule |
 
 ## What This Covers

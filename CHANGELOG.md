@@ -81,6 +81,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed agent validation to enforce coordinator allowlist pattern, preventing unintended nested subagent invocations that could exceed 1.113 depth limits.
 - Fixed agent directory organization by moving non-agent reference documents (AGENTS.md, code-review-standards.md) out of the agents directory, reducing validator false positives and improving clarity.
 
+## [4.5.1] - 2026-04-09
+
+### Added
+
+- Replaced the experimental Codex plugin and marketplace path with a direct `codex-skills/` pack covering the full 80-skill catalog.
+- Updated the Codex installers to copy skills directly into `.codex/skills/` or `~/.codex/skills/`.
+- Added Codex setup documentation describing the plugin marketplace research, what worked in testing, and why direct skill installation is now the primary recommendation.
+
+### Changed
+
+- Updated Codex setup docs to make the direct skills-pack install the primary Codex distribution path.
+- Simplified experimental Codex role messaging so the optional TOML role layer no longer references the removed `.codex/AGENTS.md` baseline.
+
+### Removed
+
+- Removed the repo-local Codex marketplace and plugin files from the primary distribution path.
+- Removed the obsolete `.codex/AGENTS.md` baseline in favor of the direct Codex skills pack.
+
 ## [4.10.0] - 2026-03-24
 
 ### CLI And Modernization Additions
