@@ -4,6 +4,16 @@ Thank you for considering a contribution. This is a community-driven project, an
 
 A sincere thanks goes out to [Taylor Arndt](https://github.com/taylorarndt) and [Jeff Bishop](https://github.com/jeffreybishop) for leading the charge in building this project. Now we want more contributors to help us make more magic. Whether you are a developer, accessibility specialist, screen reader user, or someone who just cares about inclusive software - your contributions are welcome here.
 
+## Support and Community Routing
+
+Use the Community Access support hub for cross-project troubleshooting and Q&A:
+
+- Support hub home: https://github.com/Community-Access/support
+- Discussions: https://github.com/Community-Access/support/discussions
+- Issues: https://github.com/Community-Access/support/issues
+
+Use this repository issue tracker for Accessibility Agents-specific bugs and feature requests.
+
 ## Ways to Contribute
 
 ### Report agent gaps

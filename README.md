@@ -14,6 +14,19 @@ A sincere thanks goes out to [Taylor Arndt](https://github.com/taylorarndt) and 
 
 > **We want more contributors!** If you care about making software accessible to blind and low vision users, please consider [submitting a PR](CONTRIBUTING.md). Every improvement to these agents helps developers ship more inclusive software for the people who need it most.
 
+## Support Hub
+
+For troubleshooting, Q&A, and community support across workshop and agent ecosystems, use the Community Access support repository:
+
+- Home: https://github.com/Community-Access/support
+- Discussions: https://github.com/Community-Access/support/discussions
+- Issues: https://github.com/Community-Access/support/issues
+
+Related repositories:
+
+- Workshop curriculum: https://github.com/Community-Access/git-going-with-github
+- Accessibility Agents source: https://github.com/Community-Access/accessibility-agents
+
 ---
 
 ## The Problem
