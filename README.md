@@ -247,81 +247,51 @@ Have a great accessibility-themed thinking phrase? Submit a PR to add it to our 
 
 ## Quick Start
 
-### 5.0 Installation Direction
+### One-liner install
 
-Version 5.0.0 moves Accessibility Agents to a GitHub Skills installation flow backed by native Go binaries for setup, health checks, repair, and hook management.
-
-Planned 5.0 flow:
-
-```bash
-gh skill install Community-Access/accessibility-agents
-gh skill setup Community-Access/accessibility-agents
-gh skill health Community-Access/accessibility-agents
-```
-
-Important:
-
-- `gh skill install` is the future primary install path.
-- The setup tooling is being implemented as native Go binaries, not Node.js scripts.
-- Node.js is still required for the MCP server itself, but not for the installer experience.
-
-### Build the 5.0 CLI
-
-If you are contributing to the 5.0 installer transition or preparing release artifacts, install Go and build the native CLI locally.
-
-**Windows:**
+**Windows (PowerShell):**
 
 ```powershell
-winget install --id GoLang.Go --exact --accept-package-agreements --accept-source-agreements
-go version
-pwsh -NoProfile -File scripts/build-go-cli.ps1
+irm https://raw.githubusercontent.com/Community-Access/accessibility-agents/main/install.ps1 | iex
 ```
 
-**macOS:**
+**macOS / Linux:**
 
 ```bash
-brew install go
-go version
-bash scripts/build-go-cli.sh
+curl -fsSL https://raw.githubusercontent.com/Community-Access/accessibility-agents/main/install.sh | bash
 ```
 
-The compiled binaries are written to `go-cli/bin/`. Windows outputs are `.exe` files. macOS outputs are native CLI executables.
+The shell installer requires a real `bash` environment. On Windows, use PowerShell by default; use the shell installer only from Git Bash, WSL, or another environment that provides `bash`.
 
-GitHub Actions also builds the Go CLI automatically on Windows, macOS, and Linux via [.github/workflows/build-go-cli.yml](.github/workflows/build-go-cli.yml).
+If both VS Code and VS Code Insiders are installed, the installer copies Copilot assets into both profiles automatically.
 
-5.0+ uses the GitHub Skills / Go CLI path as the supported installer path.
-
-### Install
-
-Use the GitHub Skills installer:
+Non-interactive install examples:
 
 ```bash
-gh skill install Community-Access/accessibility-agents
+bash install.sh --project --copilot --yes --no-auto-update --dry-run
 ```
 
-Then run setup/health/repair utilities as needed:
+```powershell
+.\install.ps1 -Project -Copilot -Yes -NoAutoUpdate -DryRun
+```
+
+See the full [Getting Started Guide](docs/getting-started.md) for all installation options, manual setup, global vs project install, auto-updates, and platform-specific details.
+
+### One-liner uninstall
+
+**Windows (PowerShell):**
+
+```powershell
+irm https://raw.githubusercontent.com/Community-Access/accessibility-agents/main/uninstall.ps1 | iex
+```
+
+**macOS / Linux:**
 
 ```bash
-gh skill setup Community-Access/accessibility-agents
-gh skill health Community-Access/accessibility-agents
-gh skill repair Community-Access/accessibility-agents
+curl -fsSL https://raw.githubusercontent.com/Community-Access/accessibility-agents/main/uninstall.sh | bash
 ```
 
-### Uninstall
-
-```bash
-gh skill uninstall Community-Access/accessibility-agents
-```
-
-If you need manual cleanup details, see [UNINSTALL.md](UNINSTALL.md).
-
-### Legacy Scripts Removed
-
-The legacy script installers were removed in this branch:
-
-`install.ps1`, `install.sh`, `update.ps1`, `update.sh`, `uninstall.ps1`, `uninstall.sh`.
-
-Use `gh skill` commands going forward.
+The uninstaller removes all agents, config sections, assets, extensions, and auto-update tasks across every platform (Claude Code, Copilot, Codex, Gemini). For step-by-step manual removal instructions, see [UNINSTALL.md](UNINSTALL.md).
 
 ### Safe installation — your files are never overwritten
 
