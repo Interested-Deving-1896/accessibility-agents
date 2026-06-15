@@ -26,6 +26,18 @@ This means Codex can see the Accessibility Agents entry points without loading e
 
 Codex defaults `agents.max_depth` to `1`, which lets the root session spawn one child agent but prevents that child from spawning specialists. Accessibility Agents needs the Claude-style path `root session -> accessibility-lead -> specialist agents`, so the installer configures `agents.max_depth = 2` and `agents.max_threads = 10`.
 
+Accessibility Agents also treats installation as the user's standing request to
+use the lead-dispatch workflow for accessibility work. For web accessibility
+tasks, the router should spawn `accessibility-lead` first unless the user asks
+for a single-agent pass. During installation, the universal installer reads the
+current Codex `model` from `config.toml` and stamps that model into the installed
+agent TOML files. This keeps the source templates portable while avoiding an
+unsupported custom-agent default in local ChatGPT Codex sessions.
+
+When spawning a named Accessibility Agents subagent, pass task context explicitly
+instead of requesting a full-history fork. Codex rejects typed custom-agent
+spawns that also try to inherit the full parent history.
+
 ## What Gets Installed
 
 When you select Codex support, the universal installer installs:

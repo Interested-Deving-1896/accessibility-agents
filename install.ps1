@@ -1580,12 +1580,58 @@ if ($InstallCodex -and ((Test-Path $CodexPluginSrc) -or (Test-Path $CodexSkillsS
     Set-Content -Path $CodexConfigDst -Value $CodexConfigLines -Encoding UTF8
     Add-ManifestEntry "codex-agent-config/path:$CodexConfigDst"
     Write-Host "    + Configured Codex subagent nesting in $CodexConfigDst"
+    $CodexAgentModel = $null
+    foreach ($Line in $CodexConfigLines) {
+        if ($Line -match '^\s*\[') {
+            break
+        }
+        if ($Line -match '^\s*model\s*=\s*"([^"]+)"') {
+            $CodexAgentModel = $Matches[1]
+            break
+        }
+    }
+    if (-not $CodexAgentModel) {
+        $CodexAgentModel = "gpt-5.5"
+    }
+    function Set-CodexAgentModels {
+        param(
+            [string]$AgentsDir,
+            [string]$Model
+        )
+        if (-not (Test-Path $AgentsDir)) {
+            return
+        }
+        Get-ChildItem -Path $AgentsDir -File -Filter "*.toml" | ForEach-Object {
+            $Lines = @(Get-Content -Path $_.FullName)
+            $Updated = @()
+            $Replaced = $false
+            $Inserted = $false
+            foreach ($Line in $Lines) {
+                if ($Line -match '^\s*model\s*=') {
+                    $Updated += "model = `"$Model`""
+                    $Replaced = $true
+                    continue
+                }
+                $Updated += $Line
+                if ((-not $Replaced) -and (-not $Inserted) -and ($Line -match '^\s*description\s*=')) {
+                    $Updated += "model = `"$Model`""
+                    $Inserted = $true
+                }
+            }
+            if ((-not $Replaced) -and (-not $Inserted)) {
+                $Updated = @("model = `"$Model`"") + $Updated
+            }
+            Set-Content -Path $_.FullName -Value $Updated -Encoding UTF8
+        }
+    }
+    Write-Host "    + Codex subagents will use model $CodexAgentModel"
 
     if (Test-Path $CodexPluginSrc) {
         New-Item -ItemType Directory -Force -Path $CodexPluginDst | Out-Null
         Get-ChildItem -Path $CodexPluginSrc -Force | ForEach-Object {
             Copy-Item -Path $_.FullName -Destination $CodexPluginDst -Recurse -Force
         }
+        Set-CodexAgentModels -AgentsDir (Join-Path $CodexPluginDst "agents") -Model $CodexAgentModel
         Add-ManifestEntry "codex-plugin/path:$(Join-Path $CodexPluginDst '.codex-plugin\plugin.json')"
 
         $CodexPluginSkillsDst = Join-Path $CodexAgentsProfileDir "skills"
@@ -1638,6 +1684,8 @@ if ($InstallCodex -and ((Test-Path $CodexPluginSrc) -or (Test-Path $CodexSkillsS
                 Copy-Item -Path $_.FullName -Destination $Dst -Force
                 Add-ManifestEntry "codex-agent/path:$Dst"
             }
+            Set-CodexAgentModels -AgentsDir $CodexAgentsDst -Model $CodexAgentModel
+            Add-ManifestEntry "codex-agent-model/model:$CodexAgentModel"
             Write-Host "    + Codex subagents installed to $CodexAgentsDst"
         }
 

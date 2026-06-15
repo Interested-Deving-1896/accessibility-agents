@@ -74,6 +74,9 @@ if (fs.existsSync(agentsDir)) {
         fail(`codex-plugin/agents/${file}: missing ${field}`);
       }
     }
+    if (/^model\s*=/m.test(body)) {
+      fail(`codex-plugin/agents/${file}: source agent templates must not pin a model; the installer stamps the configured Codex model dynamically.`);
+    }
   }
 }
 
@@ -98,6 +101,8 @@ if (fs.existsSync(webRouterSkill)) {
   const body = fs.readFileSync(webRouterSkill, 'utf8');
   for (const phrase of [
     'Explicitly spawn `accessibility-lead` as a Codex custom subagent',
+    "Installing Accessibility Agents for Codex is the user's standing request",
+    'do not request a full-history fork',
     '~/.agents/plugins/a11y-agents-codex/references/specialists/',
     'Dispatch matching Codex custom subagents by default',
     'Do not make users manually name every specialist',
@@ -122,12 +127,16 @@ for (const installerRel of ['install.sh', 'install.ps1']) {
       'max_depth',
       'max_threads',
       'codex-agent-config',
+      'codex-agent-model',
       './a11y-agents-codex',
       'codex-marketplace-repaired',
     ]) {
       if (!body.includes(phrase)) {
         fail(`${installerRel}: missing Codex legacy skill cleanup phrase "${phrase}".`);
       }
+    }
+    if (!body.includes('CODEX_AGENT_MODEL') && !body.includes('CodexAgentModel')) {
+      fail(`${installerRel}: missing dynamic Codex agent model variable.`);
     }
   }
 }

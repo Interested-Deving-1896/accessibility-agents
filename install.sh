@@ -1948,9 +1948,60 @@ path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 PYEOF
   add_manifest_entry "codex-agent-config/path:$CODEX_CONFIG_DST"
   echo "    + Configured Codex subagent nesting in $CODEX_CONFIG_DST"
+  CODEX_AGENT_MODEL="$(python3 - "$CODEX_CONFIG_DST" << 'PYEOF'
+import re
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+text = path.read_text(encoding="utf-8") if path.exists() else ""
+for line in text.splitlines():
+    if re.match(r"^\s*\[", line):
+        break
+    match = re.match(r'^\s*model\s*=\s*"([^"]+)"', line)
+    if match:
+        print(match.group(1))
+        break
+PYEOF
+)"
+  if [ -z "$CODEX_AGENT_MODEL" ]; then
+    CODEX_AGENT_MODEL="gpt-5.5"
+  fi
+  stamp_codex_agent_models() {
+    agents_dir="$1"
+    if [ ! -d "$agents_dir" ]; then
+      return
+    fi
+    python3 - "$agents_dir" "$CODEX_AGENT_MODEL" << 'PYEOF'
+import re
+import sys
+from pathlib import Path
+
+agents_dir = Path(sys.argv[1])
+model = sys.argv[2]
+for path in sorted(agents_dir.glob("*.toml")):
+    lines = path.read_text(encoding="utf-8").splitlines()
+    replaced = False
+    for i, line in enumerate(lines):
+        if re.match(r'^\s*model\s*=', line):
+            lines[i] = f'model = "{model}"'
+            replaced = True
+            break
+    if not replaced:
+        for i, line in enumerate(lines):
+            if re.match(r'^\s*description\s*=', line):
+                lines.insert(i + 1, f'model = "{model}"')
+                break
+        else:
+            lines.insert(0, f'model = "{model}"')
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+PYEOF
+  }
+  echo "    + Codex subagents will use model $CODEX_AGENT_MODEL"
   if [ -d "$CODEX_PLUGIN_SRC" ]; then
     mkdir -p "$CODEX_PLUGIN_DST"
     cp -R "$CODEX_PLUGIN_SRC"/. "$CODEX_PLUGIN_DST/"
+    stamp_codex_agent_models "$CODEX_PLUGIN_DST/agents"
     add_manifest_entry "codex-plugin/path:$CODEX_PLUGIN_DST/.codex-plugin/plugin.json"
 
     CODEX_PLUGIN_SKILLS_DST="$CODEX_AGENTS_PROFILE_DIR/skills"
@@ -2001,6 +2052,8 @@ PYEOF
         cp "$src_file" "$dst_file"
         add_manifest_entry "codex-agent/path:$dst_file"
       done < <(find "$CODEX_PLUGIN_SRC/agents" -type f -name "*.toml" | sort)
+      stamp_codex_agent_models "$CODEX_AGENTS_DST"
+      add_manifest_entry "codex-agent-model/model:$CODEX_AGENT_MODEL"
       echo "    + Codex subagents installed to $CODEX_AGENTS_DST"
     fi
 
