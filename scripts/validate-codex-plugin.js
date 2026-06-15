@@ -107,6 +107,22 @@ if (fs.existsSync(webRouterSkill)) {
   }
 }
 
+for (const installerRel of ['install.sh', 'install.ps1']) {
+  const installerPath = path.join(root, installerRel);
+  if (fs.existsSync(installerPath)) {
+    const body = fs.readFileSync(installerPath, 'utf8');
+    for (const phrase of [
+      'Pruned legacy Codex skill mirror',
+      'CODEX_LEGACY_SKILL_NAMES',
+      'codex-legacy-skill-pruned',
+    ]) {
+      if (!body.includes(phrase)) {
+        fail(`${installerRel}: missing Codex legacy skill cleanup phrase "${phrase}".`);
+      }
+    }
+  }
+}
+
 const extensionPath = path.join(pluginRoot, 'extensions', 'core', 'extension.json');
 const extensionsDir = path.join(pluginRoot, 'extensions');
 if (fs.existsSync(extensionsDir)) {

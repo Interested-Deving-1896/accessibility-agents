@@ -200,7 +200,7 @@ If Codex does not seem to see the plugin:
 5. Confirm built-in extension manifests were installed.
 6. Ask Codex to use a router skill or a named lead agent.
 
-If Codex reports shortened skill descriptions, the old direct skill pack may still be installed. Re-run the v6 installer so Codex uses the plugin path and small router surface.
+If Codex reports shortened skill descriptions, the old direct skill pack may still be installed. Re-run the v6 installer so Codex uses the plugin path and small router surface. The v6 installer prunes Accessibility Agents-owned legacy skill mirrors from `.codex/skills` while leaving unrelated personal skills alone.
 
 ## Maintainer Validation
 

@@ -1919,6 +1919,32 @@ if [ "$install_codex" = true ] && { [ -d "$CODEX_PLUGIN_SRC" ] || [ -d "$CODEX_S
       echo "    + Codex router skills installed to $CODEX_PLUGIN_SKILLS_DST"
     fi
 
+    # Pruned legacy Codex skill mirror: v6 exposes only router skills from
+    # ~/.agents/skills plus subagents, so old ~/.codex/skills copies cause
+    # duplicate skill descriptions and can trigger Codex's 2% skills warning.
+    CODEX_LEGACY_SKILLS_DST="$CODEX_TARGET_DIR/skills"
+    if [ -d "$CODEX_LEGACY_SKILLS_DST" ]; then
+      CODEX_LEGACY_SKILL_NAMES=""
+      if [ -d "$CODEX_PLUGIN_SRC/skills" ]; then
+        CODEX_LEGACY_SKILL_NAMES="$CODEX_LEGACY_SKILL_NAMES $(find "$CODEX_PLUGIN_SRC/skills" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)"
+      fi
+      if [ -d "$CODEX_SKILLS_SRC" ]; then
+        CODEX_LEGACY_SKILL_NAMES="$CODEX_LEGACY_SKILL_NAMES $(find "$CODEX_SKILLS_SRC" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)"
+      fi
+      pruned_legacy_codex_skills=0
+      for legacy_skill_name in $CODEX_LEGACY_SKILL_NAMES; do
+        legacy_skill_dir="$CODEX_LEGACY_SKILLS_DST/$legacy_skill_name"
+        if [ -f "$legacy_skill_dir/SKILL.md" ]; then
+          rm -rf "$legacy_skill_dir"
+          pruned_legacy_codex_skills=$((pruned_legacy_codex_skills + 1))
+          add_manifest_entry "codex-legacy-skill-pruned/path:$legacy_skill_dir"
+        fi
+      done
+      if [ "$pruned_legacy_codex_skills" -gt 0 ]; then
+        echo "    + Pruned legacy Codex skill mirror from $CODEX_LEGACY_SKILLS_DST ($pruned_legacy_codex_skills skills)"
+      fi
+    fi
+
     if [ -d "$CODEX_PLUGIN_SRC/agents" ]; then
       CODEX_AGENTS_DST="$CODEX_TARGET_DIR/agents"
       mkdir -p "$CODEX_AGENTS_DST"

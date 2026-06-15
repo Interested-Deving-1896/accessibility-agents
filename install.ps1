@@ -1539,6 +1539,32 @@ if ($InstallCodex -and ((Test-Path $CodexPluginSrc) -or (Test-Path $CodexSkillsS
             Write-Host "    + Codex router skills installed to $CodexPluginSkillsDst"
         }
 
+        # Pruned legacy Codex skill mirror: v6 exposes only router skills from
+        # ~/.agents/skills plus subagents, so old ~/.codex/skills copies cause
+        # duplicate skill descriptions and can trigger Codex's 2% skills warning.
+        $CodexLegacySkillsDst = Join-Path $CodexTargetDir "skills"
+        if (Test-Path $CodexLegacySkillsDst) {
+            $CODEX_LEGACY_SKILL_NAMES = @()
+            if (Test-Path $CodexPluginSkillsSrc) {
+                $CODEX_LEGACY_SKILL_NAMES += Get-ChildItem -Path $CodexPluginSkillsSrc -Directory | Select-Object -ExpandProperty Name
+            }
+            if (Test-Path $CodexSkillsSrc) {
+                $CODEX_LEGACY_SKILL_NAMES += Get-ChildItem -Path $CodexSkillsSrc -Directory | Select-Object -ExpandProperty Name
+            }
+            $PrunedLegacyCodexSkills = 0
+            $CODEX_LEGACY_SKILL_NAMES | Sort-Object -Unique | ForEach-Object {
+                $LegacySkillDir = Join-Path $CodexLegacySkillsDst $_
+                if (Test-Path (Join-Path $LegacySkillDir "SKILL.md")) {
+                    Remove-Item -Path $LegacySkillDir -Recurse -Force
+                    $PrunedLegacyCodexSkills += 1
+                    Add-ManifestEntry "codex-legacy-skill-pruned/path:$LegacySkillDir"
+                }
+            }
+            if ($PrunedLegacyCodexSkills -gt 0) {
+                Write-Host "    + Pruned legacy Codex skill mirror from $CodexLegacySkillsDst ($PrunedLegacyCodexSkills skills)"
+            }
+        }
+
         $CodexAgentsSrc = Join-Path $CodexPluginSrc "agents"
         if (Test-Path $CodexAgentsSrc) {
             $CodexAgentsDst = Join-Path $CodexTargetDir "agents"
