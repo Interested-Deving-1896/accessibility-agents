@@ -77,6 +77,36 @@ if (fs.existsSync(agentsDir)) {
   }
 }
 
+const accessibilityLeadToml = path.join(pluginRoot, 'agents', 'accessibility-lead.toml');
+if (fs.existsSync(accessibilityLeadToml)) {
+  const body = fs.readFileSync(accessibilityLeadToml, 'utf8');
+  for (const phrase of [
+    'accessibility-lead is the lead agent',
+    'dispatch matching Codex subagents by default',
+    'same coordinator-worker pattern as Claude Code',
+    'ship/no-ship call',
+  ]) {
+    if (!body.includes(phrase)) {
+      fail(`codex-plugin/agents/accessibility-lead.toml: missing lead-dispatch guidance phrase "${phrase}".`);
+    }
+  }
+}
+
+const webRouterSkill = path.join(pluginRoot, 'skills', 'web-accessibility', 'SKILL.md');
+if (fs.existsSync(webRouterSkill)) {
+  const body = fs.readFileSync(webRouterSkill, 'utf8');
+  for (const phrase of [
+    'Start with `accessibility-lead` for every user-facing web accessibility task',
+    'Dispatch matching Codex custom subagents by default',
+    'Do not make users manually name every specialist',
+    'The lead synthesizes specialist output',
+  ]) {
+    if (!body.includes(phrase)) {
+      fail(`codex-plugin/skills/web-accessibility/SKILL.md: missing lead-router guidance phrase "${phrase}".`);
+    }
+  }
+}
+
 const extensionPath = path.join(pluginRoot, 'extensions', 'core', 'extension.json');
 const extensionsDir = path.join(pluginRoot, 'extensions');
 if (fs.existsSync(extensionsDir)) {
