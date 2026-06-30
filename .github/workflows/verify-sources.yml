@@ -80,3 +80,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
           contents: read
+          actions: read
+          issues: write
